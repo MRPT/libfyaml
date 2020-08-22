@@ -818,6 +818,25 @@ const char *fy_token_get_text0(struct fy_token *fyt)
 	return fyt->text0;
 }
 
+const char *fy_token_get_comment(struct fy_token *fyt, char *buf, size_t maxsz,
+	enum fy_comment_placement which)
+{
+	const char *str;
+	if (maxsz == 0)
+		return buf;
+
+	/* return empty */
+	if (!fyt || which<0 || which>=fycp_max ||
+	    !fy_atom_is_set(&fyt->comment[which])) {
+		if (maxsz > 0)
+			buf[0] = '\0';
+		return buf;
+	}
+
+	str = fy_atom_format_text(&fyt->comment[which], buf, maxsz);
+	return str;
+}
+
 size_t fy_token_get_text_length(struct fy_token *fyt)
 {
 	return fy_token_format_text_length(fyt);
