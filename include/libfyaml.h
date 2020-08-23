@@ -758,6 +758,27 @@ const char *
 fy_token_get_text0(struct fy_token *fyt)
 	FY_EXPORT;
 
+enum fy_comment_placement {
+	fycp_top,
+	fycp_right,
+	fycp_bottom,
+	fycp_max,
+};
+
+/**
+ * fy_token_get_comment() - Get zero terminated comment of a token
+ *
+ * @fyt: The token out of which the comment text will be returned.
+ *
+ * Returns:
+ * A pointer to the character after the zero terminating the text representation
+ * of the token comment, i.e. return (buf+commentLen+1), or NULL if error.
+ */
+const char *
+fy_token_get_comment(struct fy_token *fyt, char *buf, size_t maxsz, 
+                     enum fy_comment_placement which)
+	FY_EXPORT;
+
 /**
  * fy_token_get_text_length() - Get length of the text of a token
  *
