@@ -771,8 +771,8 @@ enum fy_comment_placement {
  * @fyt: The token out of which the comment text will be returned.
  *
  * Returns:
- * A pointer to a zero terminated text representation of the token comment.
- * NULL in case of an error.
+ * A pointer to the character after the zero terminating the text representation
+ * of the token comment, i.e. return (buf+commentLen+1), or NULL if error.
  */
 const char *
 fy_token_get_comment(struct fy_token *fyt, char *buf, size_t maxsz, 
