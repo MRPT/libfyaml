@@ -15,11 +15,11 @@
  * @ptr:        the pointer to the member.
  * @type:       the type of the container struct this is embedded in.
  * @member:     the name of the member within the struct.
- *
+ * @membertype: the type of @member (required for portable C)
  */
-#define container_of(ptr, type, member) ({                      \
-        const typeof( ((type *)0)->member ) *__mptr = (ptr);    \
-        (type *)( (char *)__mptr - offsetof(type,member) );})
+#define container_of(ptr, type, member, membertype) \
+    (type*)((char*)((const membertype*)ptr) - \
+    offsetof(type,member))
 
 #define LIST_POISON1	NULL
 #define LIST_POISON2	NULL
@@ -343,8 +343,8 @@ static inline void list_splice_tail_init(struct list_head *list,
  * @type:	the type of the struct this is embedded in.
  * @member:	the name of the list_struct within the struct.
  */
-#define list_entry(ptr, type, member) \
-	container_of(ptr, type, member)
+#define list_entry(ptr, type, member, membertype) \
+	container_of(ptr, type, member, membertype)
 
 /**
  * list_first_entry - get the first element from a list

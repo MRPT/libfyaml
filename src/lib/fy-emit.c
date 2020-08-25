@@ -24,8 +24,10 @@
 
 /* fwd decl */
 void fy_emit_write(struct fy_emitter *emit, enum fy_emitter_write_type type, const char *str, int len);
-void fy_emit_printf(struct fy_emitter *emit, enum fy_emitter_write_type type, const char *fmt, ...)
-		__attribute__((format(printf, 3, 4)));
+void fy_emit_printf(
+	struct fy_emitter* emit, enum fy_emitter_write_type type, const char* fmt,
+	...)
+	FY_PRINTF_FORMAT(3, 4);
 
 int fy_emit_accum_grow(struct fy_emit_accum *ea)
 {
@@ -2862,7 +2864,7 @@ int fy_emit_event(struct fy_emitter *emit, struct fy_event *fye)
 	if (emit->state == FYES_NONE)
 		emit->state = FYES_STREAM_START;
 
-	fyep = container_of(fye, struct fy_eventp, e);
+	fyep = container_of(fye, struct fy_eventp, e, struct fy_event);
 
 	fy_eventp_list_add_tail(&emit->queued_events, fyep);
 

@@ -199,7 +199,7 @@ static inline const char *fy_atom_data(const struct fy_atom *atom)
 	if (!atom)
 		return NULL;
 
-	return fy_input_start(atom->fyi) + atom->start_mark.input_pos;
+	return (const char *)fy_input_start(atom->fyi) + atom->start_mark.input_pos;
 }
 
 static inline size_t fy_atom_size(const struct fy_atom *atom)

@@ -55,6 +55,7 @@ struct fy_input_cfg {
 			size_t size;
 		} alloc;
 		struct {
+			void* dummy; // Required by MSVC (C requires struct to have a field)
 		} callback;
 	};
 };
@@ -86,6 +87,7 @@ struct fy_input {
 			size_t length;
 		} file;
 		struct {
+			void* dummy;	// Required by MSVC (C requires struct to have a field)
 		} stream;
 	};
 };

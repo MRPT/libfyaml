@@ -13,7 +13,6 @@
 #endif
 
 #include <stdint.h>
-#include <alloca.h>
 #include <assert.h>
 
 #include <libfyaml.h>
@@ -71,7 +70,7 @@ int fy_utf8_get_right_generic(const void *ptr, int left, int *widthp);
 
 static inline int fy_utf8_get_right(const void *ptr, int left, int *widthp)
 {
-	const uint8_t *p = ptr + left;
+	const uint8_t *p = ((const uint8_t *)ptr) + left;
 
 	/* single byte (hot path) */
 	if (left > 0 && !(p[-1] & 0x80)) {
@@ -170,7 +169,7 @@ static inline const void *fy_utf8_strchr(const void *s, int c)
 
 static inline int fy_utf8_count(const void *ptr, size_t len)
 {
-	const uint8_t *s = ptr, *e = ptr + len;
+	const uint8_t *s = ptr, *e = (const uint8_t*)ptr + len;
 	int w, count;
 
 	count = 0;

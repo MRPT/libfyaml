@@ -13,7 +13,6 @@
 #endif
 
 #include <stdint.h>
-#include <alloca.h>
 #include <string.h>
 #include <assert.h>
 
@@ -178,9 +177,10 @@ static inline bool fy_is_json_unescaped(int c)
 
 #define FY_CTYPE_AT_BUILDER(_kind) \
 static inline const void * \
-fy_find_ ## _kind (const void *s, size_t len) \
+fy_find_ ## _kind (const void *ss, size_t len) \
 { \
-	const void *e = s + len; \
+	const uint8_t* s = (const uint8_t*)ss;     \
+	const uint8_t* e = s + len; \
 	int c, w; \
 	for (; s < e && (c = fy_utf8_get(s,  e - s, &w)) >= 0; s += w) { \
 		assert(w); \
@@ -190,9 +190,10 @@ fy_find_ ## _kind (const void *s, size_t len) \
 	return NULL; \
 } \
 static inline const void * \
-fy_find_non_ ## _kind (const void *s, size_t len) \
+fy_find_non_ ## _kind (const void *ss, size_t len) \
 { \
-	const void *e = s + len; \
+	const uint8_t* s = (const uint8_t*)ss;     \
+	const uint8_t* e = s + len; \
 	int c, w; \
 	for (; s < e && (c = fy_utf8_get(s,  e - s, &w)) >= 0; s += w) { \
 		assert(w); \
@@ -252,7 +253,7 @@ static inline const void *fy_skip_lb(const void *ptr, int left)
 	if (c == '\r' && left > width && *(char *)ptr == '\n')
 		width++;
 
-	return ptr + width;
+	return (const uint8_t*)ptr + width;
 }
 
 /* given a pointer to a chunk of memory, return pointer to first

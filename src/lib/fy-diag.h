@@ -72,15 +72,15 @@ struct fy_diag_report_ctx {
 void fy_diag_vreport(struct fy_diag *diag,
 		     const struct fy_diag_report_ctx *fydrc,
 		     const char *fmt, va_list ap);
-void fy_diag_report(struct fy_diag *diag,
-		    const struct fy_diag_report_ctx *fydrc,
-		    const char *fmt, ...)
-			__attribute__((format(printf, 3, 4)));
+void fy_diag_report(
+	struct fy_diag* diag, const struct fy_diag_report_ctx* fydrc,
+	const char* fmt, ...)
+	FY_PRINTF_FORMAT(3, 4);
 
-#ifndef NDEBUG
+#if !defined(NDEBUG) || defined(_MSC_VER)
 #define __FY_DEBUG_UNUSED__	/* nothing */
 #else
-#define __FY_DEBUG_UNUSED__	__attribute__((__unused__))
+#define __FY_DEBUG_UNUSED__ __attribute__((__unused__))
 #endif
 
 /* parser diagnostics */
@@ -94,17 +94,16 @@ int fy_parser_vdiag(struct fy_parser *fyp, unsigned int flags,
 		    const char *fmt, va_list ap);
 
 int fy_parser_diag(struct fy_parser *fyp, unsigned int flags,
-		   const char *file, int line, const char *func,
-		   const char *fmt, ...)
-			__attribute__((format(printf, 6, 7)));
+		   const char *file, int line, const char *func, const char* fmt, ...)
+		FY_PRINTF_FORMAT(6,7);
 
 void fy_parser_diag_vreport(struct fy_parser *fyp,
 			    const struct fy_diag_report_ctx *fydrc,
 			    const char *fmt, va_list ap);
-void fy_parser_diag_report(struct fy_parser *fyp,
-			   const struct fy_diag_report_ctx *fydrc,
-			   const char *fmt, ...)
-		__attribute__((format(printf, 3, 4)));
+void fy_parser_diag_report(
+	struct fy_parser* fyp, const struct fy_diag_report_ctx* fydrc,
+	const char* fmt, ...)
+	FY_PRINTF_FORMAT(3, 4);
 
 #ifndef NDEBUG
 
@@ -245,15 +244,15 @@ int fy_document_vdiag(struct fy_document *fyd, unsigned int flags,
 int fy_document_diag(struct fy_document *fyd, unsigned int flags,
 		     const char *file, int line, const char *func,
 		     const char *fmt, ...)
-			__attribute__((format(printf, 6, 7)));
+		FY_PRINTF_FORMAT(6, 7);
 
 void fy_document_diag_vreport(struct fy_document *fyd,
 			      const struct fy_diag_report_ctx *fydrc,
 			      const char *fmt, va_list ap);
-void fy_document_diag_report(struct fy_document *fyd,
-			     const struct fy_diag_report_ctx *fydrc,
-			     const char *fmt, ...)
-			__attribute__((format(printf, 3, 4)));
+void fy_document_diag_report(
+	struct fy_document* fyd, const struct fy_diag_report_ctx* fydrc,
+	const char* fmt, ...)
+	FY_PRINTF_FORMAT(3, 4);
 
 #ifndef NDEBUG
 

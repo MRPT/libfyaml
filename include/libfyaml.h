@@ -37,7 +37,12 @@ extern "C" {
 #include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
+#ifdef _MSC_VER
+#define alloca _malloca
+#define ssize_t signed long
+#else
 #include <alloca.h>
+#endif
 
 /* opaque types for the user */
 struct fy_token;
@@ -65,6 +70,14 @@ struct fy_diag;
 #else
 #define FY_EXPORT /* nothing */
 #define FY_DEPRECATED /* nothing */
+#endif
+
+#ifdef _MSC_VER
+#define FY_PRINTF_FORMAT(A__, B__)
+#define FY_SCANF_FORMAT(A__, B__)
+#else
+#define FY_PRINTF_FORMAT(A__,B__) __attribute__((format(printf, A__, B__)))
+#define FY_SCANF_FORMAT(A__, B__) __attribute__((format(scanf, A__, B__)))
 #endif
 
 /* make a copy of an allocated string and return it on stack
@@ -2049,7 +2062,7 @@ fy_document_vbuildf(const struct fy_parse_cfg *cfg,
  */
 struct fy_document *
 fy_document_buildf(const struct fy_parse_cfg *cfg, const char *fmt, ...)
-	__attribute__((format(printf, 2, 3)))
+	FY_PRINTF_FORMAT(2, 3)
 	FY_EXPORT;
 
 /**
@@ -2387,7 +2400,7 @@ fy_node_vbuildf(struct fy_document *fyd, const char *fmt, va_list ap)
  */
 struct fy_node *
 fy_node_buildf(struct fy_document *fyd, const char *fmt, ...)
-	__attribute__((format(printf, 2, 3)))
+	FY_PRINTF_FORMAT(2, 3)
 	FY_EXPORT;
 
 /**
@@ -2707,7 +2720,7 @@ fy_node_create_vscalarf(struct fy_document *fyd, const char *fmt, va_list ap)
 struct fy_node *
 fy_node_create_scalarf(struct fy_document *fyd, const char *fmt, ...)
 	FY_EXPORT
-	__attribute__((format(printf, 2, 3)));
+	FY_PRINTF_FORMAT(2, 3);
 
 /**
  * fy_node_create_sequence() - Create an empty sequence node.
@@ -3416,7 +3429,7 @@ int fy_node_vscanf(struct fy_node *fyn, const char *fmt, va_list ap);
  */
 int
 fy_node_scanf(struct fy_node *fyn, const char *fmt, ...)
-	__attribute__((format(scanf, 2, 3)))
+	FY_SCANF_FORMAT(2, 3)
 	FY_EXPORT;
 
 /**
@@ -3467,7 +3480,7 @@ fy_document_vscanf(struct fy_document *fyd, const char *fmt, va_list ap)
  */
 int
 fy_document_scanf(struct fy_document *fyd, const char *fmt, ...)
-	__attribute__((format(scanf, 2, 3)))
+	FY_SCANF_FORMAT(2, 3)
 	FY_EXPORT;
 
 /**
@@ -3763,7 +3776,8 @@ fy_node_set_vanchorf(struct fy_node *fyn, const char *fmt, va_list ap)
  */
 int
 fy_node_set_anchorf(struct fy_node *fyn, const char *fmt, ...)
-	FY_EXPORT __attribute__((format(printf, 2, 3)));
+	FY_PRINTF_FORMAT(2, 3)
+	FY_EXPORT;
 
 /**
  * fy_node_remove_anchor() - Remove an anchor
@@ -4032,7 +4046,7 @@ fy_node_vreport(struct fy_node *fyn, enum fy_error_type type,
 void
 fy_node_report(struct fy_node *fyn, enum fy_error_type type,
 	       const char *fmt, ...)
-	__attribute__((format(printf, 3, 4)))
+	FY_PRINTF_FORMAT(3, 4)
 	FY_EXPORT;
 
 /**
@@ -4083,7 +4097,7 @@ void
 fy_node_override_report(struct fy_node *fyn, enum fy_error_type type,
 			const char *file, int line, int column,
 			const char *fmt, ...)
-	__attribute__((format(printf, 6, 7)))
+	FY_PRINTF_FORMAT(6, 7)
 	FY_EXPORT;
 
 typedef void (*fy_diag_output_fn)(struct fy_diag *diag, void *user,
@@ -4274,10 +4288,9 @@ fy_diag_vprintf(struct fy_diag *diag, const char *fmt, va_list ap)
  * Note that 0 shall be returned if the diagnostic object has
  * been destroyed but not yet freed.
  */
-int
-fy_diag_printf(struct fy_diag *diag, const char *fmt, ...)
-	FY_EXPORT
-	__attribute__((format(printf, 2, 3)));
+int fy_diag_printf(struct fy_diag* diag, const char* fmt, ...)
+	FY_PRINTF_FORMAT(2, 3)
+	FY_EXPORT;
 
 /**
  * struct fy_diag_ctx - The diagnostics context
@@ -4343,8 +4356,8 @@ fy_vdiag(struct fy_diag *diag, const struct fy_diag_ctx *fydc,
 int
 fy_diagf(struct fy_diag *diag, const struct fy_diag_ctx *fydc,
 	 const char *fmt, ...)
-	FY_EXPORT
-	__attribute__((format(printf, 3, 4)));
+	FY_PRINTF_FORMAT(3, 4)
+	FY_EXPORT;
 
 #define fy_diag_diag(_diag, _level, _fmt, ...) \
 	({ \
@@ -4417,7 +4430,7 @@ fy_diag_node_vreport(struct fy_diag *diag, struct fy_node *fyn,
 void
 fy_diag_node_report(struct fy_diag *diag, struct fy_node *fyn,
 		    enum fy_error_type type, const char *fmt, ...)
-	__attribute__((format(printf, 4, 5)))
+	FY_PRINTF_FORMAT(4, 5)
 	FY_EXPORT;
 
 /**
@@ -4472,7 +4485,7 @@ void
 fy_diag_node_override_report(struct fy_diag *diag, struct fy_node *fyn,
 			     enum fy_error_type type, const char *file,
 			     int line, int column, const char *fmt, ...)
-	__attribute__((format(printf, 7, 8)))
+	FY_PRINTF_FORMAT(7, 8)
 	FY_EXPORT;
 
 #ifdef __cplusplus
