@@ -52,6 +52,9 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE
     VERSION="0.5.7.34"
 )
 
+target_compile_definitions(${PROJECT_NAME} PRIVATE
+  $<$<NOT:$<CONFIG:DEBUG>>:NDEBUG>
+)
 
 # Shared options between GCC and CLANG:
 if (NOT MSVC)
